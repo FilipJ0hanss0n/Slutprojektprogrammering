@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Template
 {
-    class Collision
+    class Collision //Kollsion
     {
         static public bool Rect(Rectangle first, Rectangle second)
         {

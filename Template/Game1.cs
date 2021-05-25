@@ -5,87 +5,82 @@ using System;
 
 namespace Template
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
+
     public class Game1 : Game
     {
+        //Variabler för klassen Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Player player;
-        Vägg vägg;
-        Fiende fiende;
-        //KOmentar
+        Maputskrivare map;
+        SpriteFont text;
+        int slow = 10;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Highscore.Init();
 
+            Player.Init(Content.Load<Texture2D>("pacman"), new Rectangle(1, 1, 1, 1));
             base.Initialize();
+            text = Content.Load<SpriteFont>("text");
+            map = new Maputskrivare(Content.Load<Texture2D>("xwing"), Content.Load<Texture2D>("pacmanbana"), Content.Load<Texture2D>("pacman"));//Lägger in bilder
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            player = new Player(Content.Load<Texture2D>("pacman"), new Rectangle(1, 1, 5, 5));
-            // TODO: use this.Content to load your game content here 
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
+
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        
         protected override void Update(GameTime gameTime)
         {
+            if (!Player.alive)//Om man dör
+            {
+                this.Exit();
+            }
+            //Allt uppdateras
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            Highscore.Update();
+            Player.Update();
+            if (slow == 0)
+            {
+                slow = 10;
+                Player.rörelse();
+                map.Update();
+            }
+
+            slow--;
+
 
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+       
         protected override void Draw(GameTime gameTime)
         {
+            //Ritar ut
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            player.Draw(spriteBatch);
-            Vägg.Draw(spriteBatch);
-            fiende.Draw(spriteBatch);
+            map.Draw(spriteBatch);
+            Player.Draw(spriteBatch);
+            Highscore.Draw(spriteBatch,text);
             spriteBatch.End();
 
-            // TODO: Add your drawing code here.
 
             base.Draw(gameTime);
         }

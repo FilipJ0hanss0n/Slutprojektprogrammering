@@ -9,9 +9,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Template
 {
-    class Bas //Bas klass
+    interface IDraw
     {
-        protected Texture2D pixel;
-        protected Rectangle pos;
+        void Draw(SpriteBatch spriteBatch);
     }
 }

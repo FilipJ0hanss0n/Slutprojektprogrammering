@@ -9,9 +9,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Template
 {
-    class Bas //Bas klass
+    interface IUpdate
     {
-        protected Texture2D pixel;
-        protected Rectangle pos;
+        void Update();
     }
 }
